@@ -19,6 +19,6 @@ public final class SpigotMain extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        ClientMain.getProcess().stop();
     }
 }

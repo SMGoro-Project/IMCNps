@@ -76,7 +76,7 @@ public class NpsProcess {
     public void stop() {
         if (process.isAlive()) {
             executeThread.interrupt();
-            process.destroy();
+            process.destroyForcibly();
         }
     }
 }

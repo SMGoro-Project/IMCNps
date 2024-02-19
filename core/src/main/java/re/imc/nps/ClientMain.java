@@ -141,7 +141,6 @@ public class ClientMain {
         Runtime.getRuntime().addShutdownHook((new Thread(() -> {
             try{
                 process.stop();
-
             }catch (Exception e) {
                 e.printStackTrace();
             }
