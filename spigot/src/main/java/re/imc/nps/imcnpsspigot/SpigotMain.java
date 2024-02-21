@@ -1,13 +1,30 @@
 package re.imc.nps.imcnpsspigot;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import re.imc.nps.ClientMain;
 import re.imc.nps.config.NpsConfig;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public final class SpigotMain extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+            if (!getServer().spigot().getConfig().getBoolean("settings.bungeecord", false)) {
+                getLogger().severe("------------------------------------------------------------");
+                getLogger().severe("byd 你应该去spigot.yml");
+                getLogger().severe("把bungeecord打开");
+                getLogger().severe("");
+                getLogger().severe("bungeecord: false --→ bungeecord: true");
+                getLogger().severe("------------------------------------------------------------");
+                getServer().shutdown();
+            }
+        }, 5, TimeUnit.SECONDS);
         // Plugin startup logic
         ClientMain.start(getDataFolder().toPath());
         NpsConfig config = ClientMain.getConfig();

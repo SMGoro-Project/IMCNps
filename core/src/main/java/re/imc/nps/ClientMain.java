@@ -63,6 +63,7 @@ public class ClientMain {
     }
     public static void readToken() {
         TOKEN = System.getProperty("nps.accesstoken", null);
+
         if (TOKEN != null) {
             return;
         }

@@ -2,3 +2,4 @@ name: IMCNps
 version: '${project.version}'
 main: re.imc.nps.imcnpsspigot.SpigotMain
 api-version: '1.13'
+folia-supported: true
