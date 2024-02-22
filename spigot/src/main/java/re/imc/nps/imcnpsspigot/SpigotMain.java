@@ -26,6 +26,7 @@ public final class SpigotMain extends JavaPlugin {
             }
         }, 5, TimeUnit.SECONDS);
         // Plugin startup logic
+
         ClientMain.start(getDataFolder().toPath());
         NpsConfig config = ClientMain.getConfig();
         getLogger().info("=======================");

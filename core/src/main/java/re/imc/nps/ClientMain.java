@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class ClientMain {
 
@@ -38,7 +39,7 @@ public class ClientMain {
          */
 
 
-        start(new File("").toPath());
+        start(new File(System.getProperty("user.dir")).toPath());
         System.out.println("=======================");
         System.out.println("房间号: " + config.getRoomId());
         System.out.println("可输入/jr " + config.getRoomId() + " 进入服务器");
@@ -53,6 +54,7 @@ public class ClientMain {
 
     public static void start(Path path) {
         DATA_PATH = path;
+        path.toFile().mkdirs();
         readToken();
         if (TOKEN == null) {
             return;
@@ -69,10 +71,10 @@ public class ClientMain {
         }
         Path file = DATA_PATH.resolve("token.txt");
         if (!file.toFile().exists()) {
-            InputStream in = ClientMain.class.getClassLoader().getResourceAsStream("token.txt");
 
             try {
-                assert in != null;
+                InputStream in = ClientMain.class.getClassLoader().getResourceAsStream("token.txt");
+
                 Files.copy(in, file);
             } catch (IOException e) {
                 e.printStackTrace();
