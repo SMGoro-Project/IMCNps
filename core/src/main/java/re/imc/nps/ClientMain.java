@@ -1,6 +1,7 @@
 package re.imc.nps;
 
 import lombok.Getter;
+import lombok.Setter;
 import re.imc.nps.config.NpsConfig;
 import re.imc.nps.process.NpsProcess;
 
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.function.Consumer;
 
 public class ClientMain {
 
@@ -20,6 +22,8 @@ public class ClientMain {
     public static String TOKEN;
     public static Path DATA_PATH;
 
+    @Setter
+    private static Consumer<NpsProcess> startHandler;
 
     public static void main(String[] args) {
         try {
@@ -39,12 +43,20 @@ public class ClientMain {
          */
 
 
+        ClientMain.setStartHandler(process -> {
+            process.setOutHandler(System.out::println);
+            process.setLogHandler(System.out::println);
+
+            if (config == null) return;
+            System.out.println("=======================");
+            System.out.println("房间号: " + config.getRoomId());
+            System.out.println("可输入/jr " + config.getRoomId() + " 进入服务器");
+            System.out.println("=======================");
+        });
+
         start(new File(System.getProperty("user.dir")).toPath());
-        System.out.println("=======================");
-        System.out.println("房间号: " + config.getRoomId());
-        System.out.println("可输入/jr " + config.getRoomId() + " 进入服务器");
-        System.out.println("=======================");
-        process.setOutHandler(System.out::println);
+        registerDaemonThread();
+
         try {
             Thread.sleep(Long.MAX_VALUE);
         } catch (InterruptedException e) {
@@ -59,9 +71,9 @@ public class ClientMain {
         if (TOKEN == null) {
             return;
         }
-        registerDaemonThread();
         registerCloseHook();
         config = loadNps();
+        startHandler.accept(process);
     }
     public static void readToken() {
         TOKEN = System.getProperty("nps.accesstoken", null);
@@ -141,6 +153,7 @@ public class ClientMain {
 
     //注册关闭钩子
     public static void registerCloseHook() {
+
         Runtime.getRuntime().addShutdownHook((new Thread(() -> {
             try{
                 process.stop();

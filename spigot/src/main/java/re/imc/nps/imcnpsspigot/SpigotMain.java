@@ -14,6 +14,7 @@ public final class SpigotMain extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        /*
         Executors.newSingleThreadScheduledExecutor().schedule(() -> {
             if (!getServer().spigot().getConfig().getBoolean("settings.bungeecord", false)) {
                 getLogger().severe("------------------------------------------------------------");
@@ -25,14 +26,22 @@ public final class SpigotMain extends JavaPlugin {
                 getServer().shutdown();
             }
         }, 5, TimeUnit.SECONDS);
+
+         */
         // Plugin startup logic
 
+        ClientMain.setStartHandler(npsProcess -> {
+            ClientMain.getProcess().setLogHandler(s -> getLogger().info(s));
+            NpsConfig config = ClientMain.getConfig();
+            if (config == null) return;
+            getLogger().info("=======================");
+            getLogger().info("房间号: " + config.getRoomId());
+            getLogger().info("可输入/jr " + config.getRoomId() + " 进入服务器");
+            getLogger().info("=======================");
+        });
         ClientMain.start(getDataFolder().toPath());
-        NpsConfig config = ClientMain.getConfig();
-        getLogger().info("=======================");
-        getLogger().info("房间号: " + config.getRoomId());
-        getLogger().info("可输入/jr " + config.getRoomId() + " 进入服务器");
-        getLogger().info("=======================");
+
+
     }
 
     @Override

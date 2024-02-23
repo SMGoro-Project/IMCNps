@@ -14,6 +14,5 @@ public class Info {
             return SystemType.WINDOWS;
         }
         return SystemType.LINUX;
-
     }
 }

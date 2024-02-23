@@ -2,6 +2,8 @@ package re.imc.nps.process;
 
 import lombok.Getter;
 import lombok.Setter;
+import re.imc.nps.ClientMain;
+import re.imc.nps.ErrorInfo;
 import re.imc.nps.Info;
 import re.imc.nps.config.NpsConfig;
 
@@ -22,6 +24,10 @@ public class NpsProcess {
     private NpsConfig config;
     @Setter
     private Consumer<String> outHandler;
+    @Setter
+    private Consumer<String> logHandler;
+    @Getter
+    private boolean stop = false;
     public NpsProcess(String npsPath, Info.SystemType systemType, NpsConfig config) {
         this.npsPath = npsPath;
         this.systemType = systemType;
@@ -60,12 +66,24 @@ public class NpsProcess {
         BufferedReader out = new BufferedReader(inputStreamReader);
         String info;
         while (true) {
-            if (!process.isAlive()) {return;}
+            if (!process.isAlive()) {
+                if (stop()) {
+                    logHandler.accept("检测到断开,重新连接中...");
+                    ClientMain.start(ClientMain.DATA_PATH);
+                    return;
+                }
+            }
             try {
                 info = out.readLine();
                 if (info == null) {continue;}
                 if (outHandler != null) {
                     outHandler.accept(info);
+                }
+                if (info.contains(ErrorInfo.CLIENT_CLOSE) || info.contains(ErrorInfo.CONNECT_FAILED)) {
+                    if (stop()) {
+                        logHandler.accept("检测到断开,重新连接中...");
+                        ClientMain.start(ClientMain.DATA_PATH);
+                    }
                 }
             } catch (Exception e) {
                 outHandler.accept(e.getMessage());
@@ -73,10 +91,13 @@ public class NpsProcess {
         }
     }
 
-    public void stop() {
-        if (process.isAlive()) {
-            executeThread.interrupt();
-            process.destroyForcibly();
+    public boolean stop() {
+        if (stop) {
+            return false;
         }
+        stop = true;
+        executeThread.interrupt();
+        process.destroy();
+        return true;
     }
 }
