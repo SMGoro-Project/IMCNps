@@ -52,9 +52,9 @@ public class ClientMain {
          */
 
 
+        setOutHandler(System.out::println);
+        setLogHandler(System.out::println);
         ClientMain.setStartHandler(process -> {
-            setOutHandler(System.out::println);
-            setLogHandler(System.out::println);
 
             if (config == null) return;
             System.out.println("=======================");
