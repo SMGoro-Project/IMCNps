@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class ClientMain {
@@ -24,6 +26,13 @@ public class ClientMain {
 
     @Setter
     private static Consumer<NpsProcess> startHandler;
+
+    @Setter
+    @Getter
+    private static Consumer<String> outHandler;
+    @Setter
+    @Getter
+    private static Consumer<String> logHandler;
 
     public static void main(String[] args) {
         try {
@@ -44,8 +53,8 @@ public class ClientMain {
 
 
         ClientMain.setStartHandler(process -> {
-            process.setOutHandler(System.out::println);
-            process.setLogHandler(System.out::println);
+            setOutHandler(System.out::println);
+            setLogHandler(System.out::println);
 
             if (config == null) return;
             System.out.println("=======================");
@@ -127,6 +136,12 @@ public class ClientMain {
         npsFile.setExecutable(true);
         npsFile.setWritable(true);
         NpsConfig config = NpsConfig.generateConfig(TOKEN);
+        if (config == null) {
+            getLogHandler().accept("无法获取npc config,重新连接中...");
+            Executors.newSingleThreadScheduledExecutor()
+                            .schedule(() -> ClientMain.start(ClientMain.DATA_PATH), 3, TimeUnit.SECONDS); ;
+            return null;
+        }
         process = new NpsProcess(DATA_PATH + "/" + Info.NPS_PATH, type, config);
         process.start();
         return config;

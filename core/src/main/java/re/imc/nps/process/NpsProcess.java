@@ -22,10 +22,7 @@ public class NpsProcess {
     private Thread executeThread;
     private Thread readThread;
     private NpsConfig config;
-    @Setter
-    private Consumer<String> outHandler;
-    @Setter
-    private Consumer<String> logHandler;
+
     @Getter
     private boolean stop = false;
     public NpsProcess(String npsPath, Info.SystemType systemType, NpsConfig config) {
@@ -68,7 +65,7 @@ public class NpsProcess {
         while (true) {
             if (!process.isAlive()) {
                 if (stop()) {
-                    logHandler.accept("检测到断开,重新连接中...");
+                    ClientMain.getLogHandler().accept("检测到断开,重新连接中...");
                     ClientMain.start(ClientMain.DATA_PATH);
                     return;
                 }
@@ -76,17 +73,17 @@ public class NpsProcess {
             try {
                 info = out.readLine();
                 if (info == null) {continue;}
-                if (outHandler != null) {
-                    outHandler.accept(info);
+                if (ClientMain.getOutHandler() != null) {
+                    ClientMain.getOutHandler().accept(info);
                 }
                 if (info.contains(ErrorInfo.CLIENT_CLOSE) || info.contains(ErrorInfo.CONNECT_FAILED)) {
                     if (stop()) {
-                        logHandler.accept("检测到断开,重新连接中...");
+                        ClientMain.getLogHandler().accept("检测到断开,重新连接中...");
                         ClientMain.start(ClientMain.DATA_PATH);
                     }
                 }
             } catch (Exception e) {
-                outHandler.accept(e.getMessage());
+                ClientMain.getLogHandler().accept(e.getMessage());
             }
         }
     }

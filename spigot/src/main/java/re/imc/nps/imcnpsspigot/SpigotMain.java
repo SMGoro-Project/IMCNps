@@ -30,9 +30,10 @@ public final class SpigotMain extends JavaPlugin {
          */
         // Plugin startup logic
 
+        ClientMain.setLogHandler(s -> getLogger().info(s));
+
         ClientMain.setStartHandler(npsProcess -> {
-            ClientMain.getProcess().setLogHandler(s -> getLogger().info(s));
-            NpsConfig config = ClientMain.getConfig();
+             NpsConfig config = ClientMain.getConfig();
             if (config == null) return;
             getLogger().info("=======================");
             getLogger().info("房间号: " + config.getRoomId());
