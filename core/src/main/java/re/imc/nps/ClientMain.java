@@ -8,9 +8,11 @@ import re.imc.nps.process.NpsProcess;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -34,44 +36,7 @@ public class ClientMain {
     @Getter
     private static Consumer<String> logHandler;
 
-    public static void main(String[] args) {
-        try {
-            TOKEN = args[0];
-        } catch (Throwable ignore) {
 
-        }
-
-        /*
-        try {
-            // 打开一个新的cmd窗口
-            Runtime.getRuntime().exec("cmd /k start start.bat");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-         */
-
-
-        setOutHandler(System.out::println);
-        setLogHandler(System.out::println);
-        ClientMain.setStartHandler(process -> {
-
-            if (config == null) return;
-            System.out.println("=======================");
-            System.out.println("房间号: " + config.getRoomId());
-            System.out.println("可输入/jr " + config.getRoomId() + " 进入服务器");
-            System.out.println("=======================");
-        });
-
-        start(new File(System.getProperty("user.dir")).toPath());
-        registerDaemonThread();
-
-        try {
-            Thread.sleep(Long.MAX_VALUE);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static void start(Path path) {
         DATA_PATH = path;
@@ -147,24 +112,6 @@ public class ClientMain {
         return config;
     }
 
-
-
-    @SuppressWarnings("BusyWait")
-    public static void registerDaemonThread() {
-        Thread thread = new Thread(() -> {
-            try {
-                registerCloseHook();
-                while (true) {
-                    Thread.sleep(1000);
-                    System.gc();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-        thread.setDaemon(true);
-        thread.start();
-    }
 
     //注册关闭钩子
     public static void registerCloseHook() {

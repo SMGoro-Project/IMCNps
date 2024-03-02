@@ -52,6 +52,7 @@
     <modules>
         <module>core</module>
         <module>spigot</module>
+        <module>standalone</module>
     </modules>
 </project>
 
