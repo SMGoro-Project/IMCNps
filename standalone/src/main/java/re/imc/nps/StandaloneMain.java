@@ -24,6 +24,8 @@ public class StandaloneMain {
         } catch (Throwable throwable) {
         }
 
+        ClientMain.setup((new File(System.getProperty("user.dir"))).toPath(), Info.Platform.STANDALONE);
+
         ClientMain.setOutHandler(System.out::println);
         ClientMain.setLogHandler(StandaloneMain::info);
         ClientMain.setStartHandler((process) -> {
@@ -35,7 +37,7 @@ public class StandaloneMain {
             }
         });
         setToken((new File(System.getProperty("user.dir"))).toPath());
-        ClientMain.start((new File(System.getProperty("user.dir"))).toPath(), Info.Platform.STANDALONE);
+        ClientMain.start((new File(System.getProperty("user.dir"))).toPath(), Info.Platform.STANDALONE, 25565);
         registerDaemonThread();
 
         try {

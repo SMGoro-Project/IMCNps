@@ -41,9 +41,12 @@ public class ClientMain {
     @Setter
     @Getter
     private static Info.Platform platform;
+    private static int port;
 
-    public static void start(Path path, Info.Platform platform) {
+    public static void setup(Path path, Info.Platform platform) {
         loadLang();
+    }
+    public static void start(Path path, Info.Platform platform, int port) {
         ClientMain.platform = platform;
         DATA_PATH = path;
         path.toFile().mkdirs();
@@ -52,14 +55,15 @@ public class ClientMain {
             return;
         }
         registerCloseHook();
-        config = loadNps();
+        ClientMain.port = Integer.parseInt(System.getProperty("nps.port", String.valueOf(port)));
+        config = loadNps(ClientMain.port);
         startHandler.accept(process);
 
         UpdateChecker.checkUpdate();
     }
 
     public static void start(Path path) {
-        start(path, platform);
+        start(path, platform, ClientMain.port);
     }
 
     public static void readToken() {
@@ -88,7 +92,7 @@ public class ClientMain {
     }
 
 
-    public static NpsConfig loadNps() {
+    public static NpsConfig loadNps(int port) {
 
         File file = new File(DATA_PATH.toFile(), Info.NPS_PATH);
 
@@ -112,7 +116,7 @@ public class ClientMain {
         npsFile.setReadable(true);
         npsFile.setExecutable(true);
         npsFile.setWritable(true);
-        NpsConfig config = NpsConfig.generateConfig(TOKEN);
+        NpsConfig config = NpsConfig.generateConfig(TOKEN, port);
         if (config == null) {
             getLogHandler().accept(LocaleMessage.message("not_load_npc_config"));
             Executors.newSingleThreadScheduledExecutor()

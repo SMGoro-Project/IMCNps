@@ -21,8 +21,8 @@ public class NpsConfig {
     private String key;
     private int roomId;
 
-    public static NpsConfig generateConfig(String token) {
-        String result = HttpUtils.sendGet(Info.API_URL + "/imc-nps/start-nps", "token=" + token);
+    public static NpsConfig generateConfig(String token, int port) {
+        String result = HttpUtils.sendGet(Info.API_URL + "/imc-nps/start-nps", "token=" + token + "&port=" + port);
         ResultDTO resultDTO = gson.fromJson(result, ResultDTO.class);
         if (resultDTO == null || !resultDTO.isSuccess()) {
             if (resultDTO != null) {

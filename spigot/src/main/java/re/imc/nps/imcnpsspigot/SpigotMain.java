@@ -1,5 +1,6 @@
 package re.imc.nps.imcnpsspigot;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import re.imc.nps.ClientMain;
 import re.imc.nps.Info;
@@ -11,6 +12,7 @@ public final class SpigotMain extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        ClientMain.setup(getDataFolder().toPath(), Info.Platform.SPIGOT);
         /*
         Executors.newSingleThreadScheduledExecutor().schedule(() -> {
             if (!getServer().spigot().getConfig().getBoolean("settings.bungeecord", false)) {
@@ -39,7 +41,7 @@ public final class SpigotMain extends JavaPlugin {
                     .replaceAll("%room_id%", String.valueOf(config.getRoomId())));
             // getLogger().info("=======================");
         });
-        ClientMain.start(getDataFolder().toPath(), Info.Platform.SPIGOT);
+        ClientMain.start(getDataFolder().toPath(), Info.Platform.SPIGOT, Bukkit.getPort());
 
 
     }
