@@ -3,11 +3,8 @@ package re.imc.nps;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.Scanner;
 
@@ -32,7 +29,7 @@ public class StandaloneMain {
             }
         });
         setToken((new File(System.getProperty("user.dir"))).toPath());
-        ClientMain.start((new File(System.getProperty("user.dir"))).toPath());
+        ClientMain.start((new File(System.getProperty("user.dir"))).toPath(), Info.Platform.STANDALONE);
         registerDaemonThread();
 
         try {
@@ -43,7 +40,7 @@ public class StandaloneMain {
     }
 
     public static void setToken(Path path) {
-        String token = System.getProperty("nps.accesstoken", (String)null);
+        String token = System.getProperty("nps.accesstoken", null);
         if (token == null) {
             Path file = path.resolve("token.txt");
             if (!file.toFile().exists()) {
@@ -51,7 +48,7 @@ public class StandaloneMain {
 
                 try {
                     InputStream in = ClientMain.class.getClassLoader().getResourceAsStream("token.txt");
-                    Files.copy(in, file, new CopyOption[0]);
+                    Files.copy(in, file);
                 } catch (IOException e) {
                     e.printStackTrace();
                     return;
@@ -70,7 +67,7 @@ public class StandaloneMain {
 
                 try {
                     if (line != null) {
-                        Files.write(file, line.getBytes(StandardCharsets.UTF_8), new OpenOption[0]);
+                        Files.write(file, line.getBytes(StandardCharsets.UTF_8));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

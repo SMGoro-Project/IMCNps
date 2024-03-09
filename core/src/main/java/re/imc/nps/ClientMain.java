@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import re.imc.nps.config.NpsConfig;
 import re.imc.nps.process.NpsProcess;
+import re.imc.nps.update.UpdateChecker;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,17 +29,18 @@ public class ClientMain {
 
     @Setter
     private static Consumer<NpsProcess> startHandler;
-
     @Setter
     @Getter
     private static Consumer<String> outHandler;
     @Setter
     @Getter
     private static Consumer<String> logHandler;
+    @Setter
+    @Getter
+    private static Info.Platform platform;
 
-
-
-    public static void start(Path path) {
+    public static void start(Path path, Info.Platform platform) {
+        ClientMain.platform = platform;
         DATA_PATH = path;
         path.toFile().mkdirs();
         readToken();
@@ -48,6 +50,12 @@ public class ClientMain {
         registerCloseHook();
         config = loadNps();
         startHandler.accept(process);
+
+        UpdateChecker.checkUpdate();
+    }
+
+    public static void start(Path path) {
+        start(path, platform);
     }
     public static void readToken() {
         TOKEN = System.getProperty("nps.accesstoken", null);

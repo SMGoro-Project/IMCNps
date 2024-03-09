@@ -3,6 +3,7 @@ package re.imc.nps.imcnpsspigot;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import re.imc.nps.ClientMain;
+import re.imc.nps.Info;
 import re.imc.nps.config.NpsConfig;
 
 import java.util.concurrent.ExecutorService;
@@ -40,7 +41,7 @@ public final class SpigotMain extends JavaPlugin {
             getLogger().info("可输入/jr " + config.getRoomId() + " 进入服务器");
             getLogger().info("=======================");
         });
-        ClientMain.start(getDataFolder().toPath());
+        ClientMain.start(getDataFolder().toPath(), Info.Platform.SPIGOT);
 
 
     }
