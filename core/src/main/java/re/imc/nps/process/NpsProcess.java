@@ -65,7 +65,7 @@ public class NpsProcess {
         while (true) {
             if (!process.isAlive()) {
                 if (stop()) {
-                    ClientMain.getLogHandler().accept("检测到断开,重新连接中...");
+                    ClientMain.getLogHandler().accept(ClientMain.getProperties().getProperty("check_disconnect_reconnect"));
                     ClientMain.start(ClientMain.DATA_PATH);
                     return;
                 }
@@ -78,7 +78,7 @@ public class NpsProcess {
                 }
                 if (info.contains(ErrorInfo.CLIENT_CLOSE) || info.contains(ErrorInfo.CONNECT_FAILED)) {
                     if (stop()) {
-                        ClientMain.getLogHandler().accept("检测到断开,重新连接中...");
+                        ClientMain.getLogHandler().accept(ClientMain.getProperties().getProperty("check_disconnect_reconnect"));
                         ClientMain.start(ClientMain.DATA_PATH);
                     }
                 }
