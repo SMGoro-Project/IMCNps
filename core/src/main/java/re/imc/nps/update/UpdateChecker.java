@@ -8,10 +8,6 @@ import re.imc.nps.dto.IMCNpsVersionInfoDTO;
 import re.imc.nps.dto.ResultDTO;
 import re.imc.nps.utils.HttpUtils;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-
 public class UpdateChecker {
 
 
