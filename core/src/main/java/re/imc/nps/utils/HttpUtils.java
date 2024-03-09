@@ -2,6 +2,7 @@ package re.imc.nps.utils;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -10,33 +11,38 @@ public class HttpUtils {
     static boolean proxySet = false;
     static String proxyHost = "127.0.0.1";
     static int proxyPort = 8087;
+
     /**
      * 编码
+     *
      * @param source
      * @return
      */
-    public static String urlEncode(String source,String encode) {
+    public static String urlEncode(String source, String encode) {
         String result = source;
         try {
-            result = URLEncoder.encode(source,encode);
+            result = URLEncoder.encode(source, encode);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return "0";
         }
         return result;
     }
+
     public static String urlEncodeGBK(String source) {
         String result = source;
         try {
-            result = URLEncoder.encode(source,"GBK");
+            result = URLEncoder.encode(source, "GBK");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return "0";
         }
         return result;
     }
+
     /**
      * 发起http请求获取返回结果
+     *
      * @param req_url 请求地址
      * @return
      */
@@ -77,6 +83,7 @@ public class HttpUtils {
 
     /**
      * 发送http请求取得返回的输入流
+     *
      * @param requestUrl 请求地址
      * @return InputStream
      */
@@ -100,10 +107,8 @@ public class HttpUtils {
     /**
      * 向指定URL发送GET方法的请求
      *
-     * @param url
-     *            发送请求的URL
-     * @param param
-     *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
+     * @param url   发送请求的URL
+     * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
      * @return URL 所代表远程资源的响应结果
      */
     public static String sendGet(String url, String param) {
@@ -131,7 +136,7 @@ public class HttpUtils {
 //            }
             // 定义 BufferedReader输入流来读取URL的响应
             in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
+                    connection.getInputStream(), StandardCharsets.UTF_8));
             String line;
             while ((line = in.readLine()) != null) {
                 result += line;
@@ -153,7 +158,7 @@ public class HttpUtils {
         return result;
     }
 
-    public static String sendGetBearerToken(String url, String param,String token) {
+    public static String sendGetBearerToken(String url, String param, String token) {
         String result = "";
         BufferedReader in = null;
         try {
@@ -167,7 +172,7 @@ public class HttpUtils {
             connection.setRequestProperty("user-agent",
                     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
 
-            connection.setRequestProperty("authorization","Bearer " + token);
+            connection.setRequestProperty("authorization", "Bearer " + token);
 
             // 建立实际的连接
             connection.connect();
@@ -202,30 +207,26 @@ public class HttpUtils {
     }
 
 
-
     /**
      * 向指定 URL 发送POST方法的请求
      *
-     * @param url
-     *            发送请求的 URL
-     * @param param
-     *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
-     * @param isproxy
-     *               是否使用代理模式
+     * @param url     发送请求的 URL
+     * @param param   请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
+     * @param isproxy 是否使用代理模式
      * @return 所代表远程资源的响应结果
      */
-    public static String sendPost(String url, String param,boolean isproxy) {
+    public static String sendPost(String url, String param, boolean isproxy) {
         OutputStreamWriter out = null;
         BufferedReader in = null;
         String result = "";
         try {
             URL realUrl = new URL(url);
             HttpURLConnection conn = null;
-            if(isproxy){//使用代理模式
+            if (isproxy) {//使用代理模式
                 @SuppressWarnings("static-access")
                 Proxy proxy = new Proxy(Proxy.Type.DIRECT.HTTP, new InetSocketAddress(proxyHost, proxyPort));
                 conn = (HttpURLConnection) realUrl.openConnection(proxy);
-            }else{
+            } else {
                 conn = (HttpURLConnection) realUrl.openConnection();
             }
             // 打开和URL之间的连接
@@ -254,33 +255,32 @@ public class HttpUtils {
             out.flush();
             // 定义BufferedReader输入流来读取URL的响应
             in = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream(),"UTF-8"));
+                    new InputStreamReader(conn.getInputStream(), "UTF-8"));
             String line;
             while ((line = in.readLine()) != null) {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("发送 POST 请求出现异常！"+e);
+            System.out.println("发送 POST 请求出现异常！" + e);
             e.printStackTrace();
         }
         //使用finally块来关闭输出流、输入流
-        finally{
-            try{
-                if(out!=null){
+        finally {
+            try {
+                if (out != null) {
                     out.close();
                 }
-                if(in!=null){
+                if (in != null) {
                     in.close();
                 }
-            }
-            catch(IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
         return result;
     }
 
-    public static String sendPostBearerToken(String url, String param,boolean isproxy,String token) {
+    public static String sendPostBearerToken(String url, String param, boolean isproxy, String token) {
 
         OutputStreamWriter out = null;
         BufferedReader in = null;
@@ -288,11 +288,11 @@ public class HttpUtils {
         try {
             URL realUrl = new URL(url);
             HttpURLConnection conn = null;
-            if(isproxy){//使用代理模式
+            if (isproxy) {//使用代理模式
                 @SuppressWarnings("static-access")
                 Proxy proxy = new Proxy(Proxy.Type.DIRECT.HTTP, new InetSocketAddress(proxyHost, proxyPort));
                 conn = (HttpURLConnection) realUrl.openConnection(proxy);
-            }else{
+            } else {
                 conn = (HttpURLConnection) realUrl.openConnection();
             }
             // 打开和URL之间的连接
@@ -311,7 +311,7 @@ public class HttpUtils {
                     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
             conn.setRequestProperty("Content-Type", "application/json");
             // 设置认证
-            conn.setRequestProperty("authorization","Bearer " + token);
+            conn.setRequestProperty("authorization", "Bearer " + token);
 
             conn.connect();
 
@@ -323,34 +323,33 @@ public class HttpUtils {
             out.flush();
             // 定义BufferedReader输入流来读取URL的响应
             in = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream(),"UTF-8"));
+                    new InputStreamReader(conn.getInputStream(), "UTF-8"));
             String line;
             while ((line = in.readLine()) != null) {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("发送 POST 请求出现异常！"+e);
+            System.out.println("发送 POST 请求出现异常！" + e);
 //            e.printStackTrace();
             return null;
         }
         //使用finally块来关闭输出流、输入流
-        finally{
-            try{
-                if(out!=null){
+        finally {
+            try {
+                if (out != null) {
                     out.close();
                 }
-                if(in!=null){
+                if (in != null) {
                     in.close();
                 }
-            }
-            catch(IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
         return result;
     }
 
-    public static String sendPostJson(String url, String param,boolean isproxy) {
+    public static String sendPostJson(String url, String param, boolean isproxy) {
 
         OutputStreamWriter out = null;
         BufferedReader in = null;
@@ -358,11 +357,11 @@ public class HttpUtils {
         try {
             URL realUrl = new URL(url);
             HttpURLConnection conn = null;
-            if(isproxy){//使用代理模式
+            if (isproxy) {//使用代理模式
                 @SuppressWarnings("static-access")
                 Proxy proxy = new Proxy(Proxy.Type.DIRECT.HTTP, new InetSocketAddress(proxyHost, proxyPort));
                 conn = (HttpURLConnection) realUrl.openConnection(proxy);
-            }else{
+            } else {
                 conn = (HttpURLConnection) realUrl.openConnection();
             }
             // 打开和URL之间的连接
@@ -391,27 +390,26 @@ public class HttpUtils {
             out.flush();
             // 定义BufferedReader输入流来读取URL的响应
             in = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream(),"UTF-8"));
+                    new InputStreamReader(conn.getInputStream(), "UTF-8"));
             String line;
             while ((line = in.readLine()) != null) {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("发送 POST 请求出现异常！"+e);
+            System.out.println("发送 POST 请求出现异常！" + e);
 //            e.printStackTrace();
             return null;
         }
         //使用finally块来关闭输出流、输入流
-        finally{
-            try{
-                if(out!=null){
+        finally {
+            try {
+                if (out != null) {
                     out.close();
                 }
-                if(in!=null){
+                if (in != null) {
                     in.close();
                 }
-            }
-            catch(IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }

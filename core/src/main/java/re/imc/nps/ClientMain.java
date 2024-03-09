@@ -3,27 +3,33 @@ package re.imc.nps;
 import lombok.Getter;
 import lombok.Setter;
 import re.imc.nps.config.NpsConfig;
+import re.imc.nps.i18n.LocaleMessage;
 import re.imc.nps.process.NpsProcess;
 import re.imc.nps.update.UpdateChecker;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class ClientMain {
 
+    public static String TOKEN;
+    public static Path DATA_PATH;
     @Getter
     private static NpsProcess process;
     @Getter
     private static NpsConfig config;
-    public static String TOKEN;
-    public static Path DATA_PATH;
-
+    @Getter
+    private static Properties properties;
     @Setter
     private static Consumer<NpsProcess> startHandler;
     @Setter
@@ -37,6 +43,7 @@ public class ClientMain {
     private static Info.Platform platform;
 
     public static void start(Path path, Info.Platform platform) {
+        loadLang();
         ClientMain.platform = platform;
         DATA_PATH = path;
         path.toFile().mkdirs();
@@ -54,6 +61,7 @@ public class ClientMain {
     public static void start(Path path) {
         start(path, platform);
     }
+
     public static void readToken() {
         TOKEN = System.getProperty("nps.accesstoken", null);
 
@@ -78,7 +86,6 @@ public class ClientMain {
             e.printStackTrace();
         }
     }
-
 
 
     public static NpsConfig loadNps() {
@@ -107,9 +114,10 @@ public class ClientMain {
         npsFile.setWritable(true);
         NpsConfig config = NpsConfig.generateConfig(TOKEN);
         if (config == null) {
-            getLogHandler().accept("无法获取npc config,重新连接中...");
+            getLogHandler().accept(LocaleMessage.message("not_load_npc_config"));
             Executors.newSingleThreadScheduledExecutor()
-                            .schedule(() -> ClientMain.start(ClientMain.DATA_PATH), 3, TimeUnit.SECONDS); ;
+                    .schedule(() -> ClientMain.start(ClientMain.DATA_PATH), 3, TimeUnit.SECONDS);
+            ;
             return null;
         }
         process = new NpsProcess(DATA_PATH + "/" + Info.NPS_PATH, type, config);
@@ -117,14 +125,33 @@ public class ClientMain {
         return config;
     }
 
+    public static void loadLang() {
+        Locale locale = Locale.getDefault();
+        String lang = locale.getLanguage() + "_" + locale.getCountry();
+
+        properties = new Properties();
+        InputStream langInput = ClientMain.class.getClassLoader()
+                .getResourceAsStream("lang_" + lang + ".properties");
+        if (langInput == null) {
+            langInput = ClientMain.class.getClassLoader()
+                    .getResourceAsStream("lang_en_US.properties");
+        }
+
+        try {
+            properties.load(new InputStreamReader(langInput, StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     //注册关闭钩子
     public static void registerCloseHook() {
 
         Runtime.getRuntime().addShutdownHook((new Thread(() -> {
-            try{
+            try {
                 process.stop();
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         })));

@@ -1,5 +1,7 @@
 package re.imc.nps;
 
+import re.imc.nps.i18n.LocaleMessage;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +11,7 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class StandaloneMain {
+
     public StandaloneMain() {
     }
 
@@ -22,10 +25,10 @@ public class StandaloneMain {
         ClientMain.setLogHandler(System.out::println);
         ClientMain.setStartHandler((process) -> {
             if (ClientMain.getConfig() != null) {
-                System.out.println("=======================");
-                System.out.println("房间号: " + ClientMain.getConfig().getRoomId());
-                System.out.println("可输入/jr " + ClientMain.getConfig().getRoomId() + " 进入服务器");
-                System.out.println("=======================");
+                // System.out.println("=======================");
+                System.out.println(LocaleMessage.message("room_id_tip")
+                        .replaceAll("%room_id%", String.valueOf(ClientMain.getConfig().getRoomId())));
+                // System.out.println("=======================");
             }
         });
         setToken((new File(System.getProperty("user.dir"))).toPath());
@@ -44,7 +47,7 @@ public class StandaloneMain {
         if (token == null) {
             Path file = path.resolve("token.txt");
             if (!file.toFile().exists()) {
-                System.out.println("未发现Token! 请在这里填写你的Token");
+                System.out.println(LocaleMessage.message("not_found_token"));
 
                 try {
                     InputStream in = ClientMain.class.getClassLoader().getResourceAsStream("token.txt");
@@ -57,7 +60,7 @@ public class StandaloneMain {
                 Scanner scanner = new Scanner(System.in);
                 String line = null;
 
-                while(scanner.hasNextLine()) {
+                while (scanner.hasNextLine()) {
                     line = scanner.nextLine();
                     if (line != null) {
                         scanner.close();
@@ -82,7 +85,7 @@ public class StandaloneMain {
             try {
                 ClientMain.registerCloseHook();
 
-                while(true) {
+                while (true) {
                     Thread.sleep(1000L);
                     System.gc();
                 }
