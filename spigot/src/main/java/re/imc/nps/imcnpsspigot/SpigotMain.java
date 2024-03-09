@@ -1,19 +1,15 @@
 package re.imc.nps.imcnpsspigot;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import re.imc.nps.ClientMain;
 import re.imc.nps.Info;
 import re.imc.nps.config.NpsConfig;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import re.imc.nps.i18n.LocaleMessage;
 
 public final class SpigotMain extends JavaPlugin {
 
-  @Override
-  public void onEnable() {
+    @Override
+    public void onEnable() {
 
         /*
         Executors.newSingleThreadScheduledExecutor().schedule(() -> {
@@ -29,27 +25,27 @@ public final class SpigotMain extends JavaPlugin {
         }, 5, TimeUnit.SECONDS);
 
          */
-    // Plugin startup logic
+        // Plugin startup logic
 
-    ClientMain.setLogHandler(s -> getLogger().info(s));
+        ClientMain.setLogHandler(s -> getLogger().info(s));
 
-    ClientMain.setStartHandler(npsProcess -> {
-      NpsConfig config = ClientMain.getConfig();
-      if (config == null) {
-        return;
-      }
-      getLogger().info("=======================");
-      getLogger().info(ClientMain.getProperties().getProperty("room_number_tip")
-          .replaceAll("%room_number%", String.valueOf(config.getRoomId())));
-      getLogger().info("=======================");
-    });
-    ClientMain.start(getDataFolder().toPath(), Info.Platform.SPIGOT);
+        ClientMain.setStartHandler(npsProcess -> {
+            NpsConfig config = ClientMain.getConfig();
+            if (config == null) {
+                return;
+            }
+            // getLogger().info("=======================");
+            getLogger().info(LocaleMessage.message("room_number_tip")
+                    .replaceAll("%room_number%", String.valueOf(config.getRoomId())));
+            // getLogger().info("=======================");
+        });
+        ClientMain.start(getDataFolder().toPath(), Info.Platform.SPIGOT);
 
 
-  }
+    }
 
-  @Override
-  public void onDisable() {
-    ClientMain.getProcess().stop();
-  }
+    @Override
+    public void onDisable() {
+        ClientMain.getProcess().stop();
+    }
 }

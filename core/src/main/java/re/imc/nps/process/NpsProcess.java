@@ -1,17 +1,16 @@
 package re.imc.nps.process;
 
 import lombok.Getter;
-import lombok.Setter;
 import re.imc.nps.ClientMain;
 import re.imc.nps.ErrorInfo;
 import re.imc.nps.Info;
 import re.imc.nps.config.NpsConfig;
+import re.imc.nps.i18n.LocaleMessage;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
 @Getter
 public class NpsProcess {
@@ -25,6 +24,7 @@ public class NpsProcess {
 
     @Getter
     private boolean stop = false;
+
     public NpsProcess(String npsPath, Info.SystemType systemType, NpsConfig config) {
         this.npsPath = npsPath;
         this.systemType = systemType;
@@ -53,10 +53,12 @@ public class NpsProcess {
         Executors.newSingleThreadScheduledExecutor().execute(executeThread::start);
 
     }
+
     public void startRead() {
         readThread = new Thread(this::readNps);
         Executors.newSingleThreadScheduledExecutor().execute(readThread::start);
     }
+
     public void readNps() {
         InputStream inputStream = process.getInputStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -65,20 +67,22 @@ public class NpsProcess {
         while (true) {
             if (!process.isAlive()) {
                 if (stop()) {
-                    ClientMain.getLogHandler().accept(ClientMain.getProperties().getProperty("check_disconnect_reconnect"));
+                    ClientMain.getLogHandler().accept(LocaleMessage.message("check_disconnect_reconnect"));
                     ClientMain.start(ClientMain.DATA_PATH);
                     return;
                 }
             }
             try {
                 info = out.readLine();
-                if (info == null) {continue;}
+                if (info == null) {
+                    continue;
+                }
                 if (ClientMain.getOutHandler() != null) {
                     ClientMain.getOutHandler().accept(info);
                 }
                 if (info.contains(ErrorInfo.CLIENT_CLOSE) || info.contains(ErrorInfo.CONNECT_FAILED)) {
                     if (stop()) {
-                        ClientMain.getLogHandler().accept(ClientMain.getProperties().getProperty("check_disconnect_reconnect"));
+                        ClientMain.getLogHandler().accept(LocaleMessage.message("check_disconnect_reconnect"));
                         ClientMain.start(ClientMain.DATA_PATH);
                     }
                 }
