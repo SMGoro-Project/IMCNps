@@ -131,6 +131,10 @@ public class ClientMain {
         properties = new Properties();
         InputStream langInput = ClientMain.class.getClassLoader()
                 .getResourceAsStream("lang_" + lang + ".properties");
+        if (langInput == null) {
+            langInput = ClientMain.class.getClassLoader()
+                    .getResourceAsStream("lang_en_US.properties");
+        }
         try {
             properties.load(new InputStreamReader(langInput, StandardCharsets.UTF_8));
         } catch (IOException e) {
