@@ -6,6 +6,7 @@ import re.imc.nps.ClientMain;
 import re.imc.nps.Info;
 import re.imc.nps.dto.IMCNpsVersionInfoDTO;
 import re.imc.nps.dto.ResultDTO;
+import re.imc.nps.i18n.LocaleMessage;
 import re.imc.nps.utils.HttpUtils;
 
 public class UpdateChecker {
@@ -23,7 +24,7 @@ public class UpdateChecker {
         } else {
             IMCNpsVersionInfoDTO data = resultDTO.getData();
             if (data.getVersion() > Info.VERSION) {
-
+                ClientMain.getLogHandler().accept(LocaleMessage.message("update_check_need_update").replace("%url%", data.getUpdateUrl()));
             } else {
 
             }

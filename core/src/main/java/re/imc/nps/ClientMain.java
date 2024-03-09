@@ -43,6 +43,7 @@ public class ClientMain {
     private static Info.Platform platform;
 
     public static void start(Path path, Info.Platform platform) {
+        loadLang();
         ClientMain.platform = platform;
         DATA_PATH = path;
         path.toFile().mkdirs();
@@ -52,7 +53,6 @@ public class ClientMain {
         }
         registerCloseHook();
         config = loadNps();
-        loadLang();
         startHandler.accept(process);
 
         UpdateChecker.checkUpdate();
@@ -128,6 +128,7 @@ public class ClientMain {
     public static void loadLang() {
         Locale locale = Locale.getDefault();
         String lang = locale.getLanguage() + "_" + locale.getCountry();
+
         properties = new Properties();
         InputStream langInput = ClientMain.class.getClassLoader()
                 .getResourceAsStream("lang_" + lang + ".properties");
@@ -135,6 +136,7 @@ public class ClientMain {
             langInput = ClientMain.class.getClassLoader()
                     .getResourceAsStream("lang_en_US.properties");
         }
+
         try {
             properties.load(new InputStreamReader(langInput, StandardCharsets.UTF_8));
         } catch (IOException e) {

@@ -35,8 +35,8 @@ public final class SpigotMain extends JavaPlugin {
                 return;
             }
             // getLogger().info("=======================");
-            getLogger().info(LocaleMessage.message("room_number_tip")
-                    .replaceAll("%room_number%", String.valueOf(config.getRoomId())));
+            getLogger().info(LocaleMessage.message("room_id_tip")
+                    .replaceAll("%room_id%", String.valueOf(config.getRoomId())));
             // getLogger().info("=======================");
         });
         ClientMain.start(getDataFolder().toPath(), Info.Platform.SPIGOT);

@@ -26,8 +26,8 @@ public class StandaloneMain {
         ClientMain.setStartHandler((process) -> {
             if (ClientMain.getConfig() != null) {
                 // System.out.println("=======================");
-                System.out.println(LocaleMessage.message("room_number_tip")
-                        .replaceAll("%room_number%", String.valueOf(ClientMain.getConfig().getRoomId())));
+                System.out.println(LocaleMessage.message("room_id_tip")
+                        .replaceAll("%room_id%", String.valueOf(ClientMain.getConfig().getRoomId())));
                 // System.out.println("=======================");
             }
         });
