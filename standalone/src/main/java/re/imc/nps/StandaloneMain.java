@@ -1,5 +1,8 @@
 package re.imc.nps;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import re.imc.nps.i18n.LocaleMessage;
 
 import java.io.File;
@@ -9,11 +12,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class StandaloneMain {
 
-    public StandaloneMain() {
-    }
+    private static ComponentLogger logger = ComponentLogger.logger("IMCNps");
 
     public static void main(String[] args) {
         try {
@@ -22,13 +25,13 @@ public class StandaloneMain {
         }
 
         ClientMain.setOutHandler(System.out::println);
-        ClientMain.setLogHandler(System.out::println);
+        ClientMain.setLogHandler(StandaloneMain::info);
         ClientMain.setStartHandler((process) -> {
             if (ClientMain.getConfig() != null) {
-                // System.out.println("=======================");
-                System.out.println(LocaleMessage.message("room_id_tip")
+                // info("=======================");
+                info(LocaleMessage.message("room_id_tip")
                         .replaceAll("%room_id%", String.valueOf(ClientMain.getConfig().getRoomId())));
-                // System.out.println("=======================");
+                // info("=======================");
             }
         });
         setToken((new File(System.getProperty("user.dir"))).toPath());
@@ -42,12 +45,16 @@ public class StandaloneMain {
         }
     }
 
+    public static void info(String msg) {
+        logger.info(LegacyComponentSerializer.legacySection().deserialize(msg));
+
+    }
     public static void setToken(Path path) {
         String token = System.getProperty("nps.accesstoken", null);
         if (token == null) {
             Path file = path.resolve("token.txt");
             if (!file.toFile().exists()) {
-                System.out.println(LocaleMessage.message("not_found_token"));
+                info(LocaleMessage.message("not_found_token"));
 
                 try {
                     InputStream in = ClientMain.class.getClassLoader().getResourceAsStream("token.txt");
