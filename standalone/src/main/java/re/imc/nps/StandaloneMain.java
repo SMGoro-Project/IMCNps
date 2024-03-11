@@ -2,7 +2,6 @@ package re.imc.nps;
 
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import re.imc.nps.i18n.LocaleMessage;
 
 import java.io.File;
@@ -12,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
-import java.util.logging.Logger;
 
 public class StandaloneMain {
 
