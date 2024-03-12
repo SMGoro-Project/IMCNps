@@ -85,7 +85,7 @@ public class ClientMain {
             }
         }
         try {
-            TOKEN = Files.readAllLines(file).get(0);
+            TOKEN = Files.readAllLines(file).get(0).replace(" ", "");
         } catch (Exception e) {
             e.printStackTrace();
         }
