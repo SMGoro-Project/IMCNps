@@ -5,7 +5,9 @@ import lombok.Getter;
 
 public class Info {
 
-    public static int VERSION = 2;
+    public static int BUILD_VERSION = -1;
+
+    public static String VERSION = "UNKNOWN";
     public static final String NPS_PATH = "npc";
     public static final String API_URL = "http://atlasapi.smgoro.com:25563";
 

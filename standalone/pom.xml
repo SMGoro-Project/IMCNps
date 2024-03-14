@@ -9,7 +9,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>standalone</artifactId>
+    <name>standalone</name>
+    <artifactId>IMCNps-standalone</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

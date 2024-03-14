@@ -44,6 +44,7 @@ public class ClientMain {
     private static int port;
 
     public static void setup(Path path, Info.Platform platform) {
+        loadVersion();
         loadLang();
     }
     public static void start(Path path, Info.Platform platform, int port) {
@@ -129,6 +130,22 @@ public class ClientMain {
         return config;
     }
 
+    public static void loadVersion() {
+        Properties versionProperties = new Properties();
+        InputStream input = ClientMain.class.getClassLoader()
+                .getResourceAsStream("imcnps.version.properties");
+        if (input == null) {
+            return;
+        }
+
+        try {
+            properties.load(new InputStreamReader(input, StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Info.VERSION = properties.getProperty("version");
+        Info.BUILD_VERSION = Integer.parseInt(properties.getProperty("build_version"));
+    }
     public static void loadLang() {
         Locale locale = Locale.getDefault();
         String lang = locale.getLanguage() + "_" + locale.getCountry();
