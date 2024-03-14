@@ -139,12 +139,12 @@ public class ClientMain {
         }
 
         try {
-            properties.load(new InputStreamReader(input, StandardCharsets.UTF_8));
+            versionProperties.load(new InputStreamReader(input, StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Info.VERSION = properties.getProperty("version");
-        Info.BUILD_VERSION = Integer.parseInt(properties.getProperty("build_version"));
+        Info.VERSION = versionProperties.getProperty("version");
+        Info.BUILD_VERSION = Integer.parseInt(versionProperties.getProperty("build_version"));
     }
     public static void loadLang() {
         Locale locale = Locale.getDefault();
