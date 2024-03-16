@@ -39,8 +39,6 @@ update_check_need_update="""
 §e> §aA new version of IMCNps is Available!
 §e> §fDownload it at §b§n%url%§r"""
 
-fabric_before_start="""
-"""
 fabric_room_id_tip="""
 
 §e○§c-==========[§f Room Created §c]==========-§e○

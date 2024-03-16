@@ -41,8 +41,6 @@ update_check_need_update="""
 §e> §f下载链接: §b§n%url%§r
 §e请及时更新你的IMCNps，以防无法联机！"""
 
-fabric_before_start="""
-"""
 fabric_room_id_tip="""
 
 §e○§c-==========[§f 房间已创建 §c]==========-§e○
