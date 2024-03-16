@@ -1,7 +1,9 @@
 package re.imc.nps;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import re.imc.nps.api.NpsLogger;
 import re.imc.nps.i18n.LocaleMessage;
 
 import java.io.File;
@@ -22,15 +24,27 @@ public class StandaloneMain {
         } catch (Throwable throwable) {
         }
 
-        ClientMain.setup((new File(System.getProperty("user.dir"))).toPath(), Info.Platform.STANDALONE);
+        ClientMain.setup((new File(System.getProperty("user.dir"))).toPath(), Info.Platform.STANDALONE, new NpsLogger() {
+            @Override
+            public void logNpsProcess(String msg) {
+                System.out.println(msg);
+            }
 
-        ClientMain.setOutHandler(System.out::println);
-        ClientMain.setLogHandler(StandaloneMain::info);
+            @Override
+            public void logInfo(Component component) {
+                logger.info(component);
+            }
+
+            @Override
+            public void logInfoConsole(Component component) {
+                logInfo(component);
+            }
+        });
+
         ClientMain.setStartHandler((process) -> {
             if (ClientMain.getConfig() != null) {
                 // info("=======================");
-                info(LocaleMessage.message("room_id_tip")
-                        .replaceAll("%room_id%", String.valueOf(ClientMain.getConfig().getRoomId())));
+                info(LocaleMessage.message("room_id_tip", s -> s.replace("%room_id%", String.valueOf(ClientMain.getConfig().getRoomId()))));
                 // info("=======================");
             }
         });
@@ -45,8 +59,8 @@ public class StandaloneMain {
         }
     }
 
-    public static void info(String msg) {
-        logger.info(LegacyComponentSerializer.legacySection().deserialize(msg));
+    public static void info(Component msg) {
+        logger.info(msg);
 
     }
     public static void setToken(Path path) {

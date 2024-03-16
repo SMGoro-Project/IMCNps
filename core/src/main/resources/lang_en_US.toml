@@ -1,0 +1,29 @@
+before_start="""
+"""
+
+not_load_npc_config="§e> §cFailed to get npc config, reconnecting..."
+check_disconnect_reconnect="§e> §cConnection ERROR. Reconnecting..."
+room_id_tip="""
+§e○§c-==========[§f Room Created §c]==========-§e○
+§e> §fRoom ID:§b %room_id%
+§e> §fTo join your room, use§b /jr %room_id% §fat CymoLink Lobby.
+§e○§c-==========[§f Room Created §c]==========-§e○"""
+not_found_token="§e> §cToken Not Found! Use §b/nps <Token>§c to set your token first!"
+update_check_need_update="""
+§e> §aA new version of IMCNps is Available!
+§e> §fDownload it at §b§n%url%§r"""
+
+fabric_before_start="""
+"""
+fabric_room_id_tip="""
+§e○§c-==========[§f Room Created §c]==========-§e○
+§e> §fRoom ID:§b %room_id%
+§e> §fTo join your room, use§b /jr %room_id% §fat CymoLink Lobby.
+§e○§c-==========[§f Room Created §c]==========-§e○"""
+fabric_no_token_tip="""
+§e> §fJoin Cymolink Lobby to get your token
+§e> §aMultiplayer §f→§a Add Server §f→§a Server Address: §eus.cymolink.com
+"""
+fabric_get_token="""
+§e> §aSuccessfully get Token from Cymolink automatically. You can go to Singleplayer and §eopen to LAN§a now!"""
+fabric_already_start="§e> §cIMCNps is already running! If you want to change your token, go to CymoLink Lobby to refresh your token, and restart Minecraft."

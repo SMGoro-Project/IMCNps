@@ -1,9 +1,12 @@
 package re.imc.nps.imcnpsspigot;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import re.imc.nps.ClientMain;
 import re.imc.nps.Info;
+import re.imc.nps.api.NpsLogger;
 import re.imc.nps.config.NpsConfig;
 import re.imc.nps.i18n.LocaleMessage;
 
@@ -12,7 +15,26 @@ public final class SpigotMain extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        ClientMain.setup(getDataFolder().toPath(), Info.Platform.SPIGOT);
+        ClientMain.setup(getDataFolder().toPath(), Info.Platform.SPIGOT, new NpsLogger() {
+            @Override
+            public void logNpsProcess(String msg) {
+
+            }
+
+            @Override
+            public void logInfo(Component component) {
+                try {
+                    Bukkit.getConsoleSender().sendMessage(component);
+                } catch (Exception e) {
+                    Bukkit.getConsoleSender().sendMessage(LegacyComponentSerializer.legacySection().serialize(component));
+                }
+            }
+
+            @Override
+            public void logInfoConsole(Component component) {
+                logInfo(component);
+            }
+        });
         /*
         Executors.newSingleThreadScheduledExecutor().schedule(() -> {
             if (!getServer().spigot().getConfig().getBoolean("settings.bungeecord", false)) {
@@ -27,9 +49,7 @@ public final class SpigotMain extends JavaPlugin {
         }, 5, TimeUnit.SECONDS);
 
          */
-        // Plugin startup logic
 
-        ClientMain.setLogHandler(s -> getLogger().info(s));
 
         ClientMain.setStartHandler(npsProcess -> {
             NpsConfig config = ClientMain.getConfig();
@@ -37,8 +57,7 @@ public final class SpigotMain extends JavaPlugin {
                 return;
             }
             // getLogger().info("=======================");
-            getLogger().info(LocaleMessage.message("room_id_tip")
-                    .replaceAll("%room_id%", String.valueOf(config.getRoomId())));
+            ClientMain.getNpsLogger().logInfo(LocaleMessage.message("room_id_tip", s -> s.replaceAll("%room_id%", String.valueOf(config.getRoomId()))));
             // getLogger().info("=======================");
         });
         ClientMain.start(getDataFolder().toPath(), Info.Platform.SPIGOT, Bukkit.getPort());

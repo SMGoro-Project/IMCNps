@@ -27,7 +27,7 @@ public class NpsConfig {
         ResultDTO resultDTO = gson.fromJson(result, ResultDTO.class);
         if (resultDTO == null || !resultDTO.isSuccess()) {
             if (resultDTO != null) {
-                ClientMain.getLogHandler().accept(resultDTO.getMsg());
+                ClientMain.getNpsLogger().logInfo(resultDTO.getMsg());
             } else {
                 return null;
             }

@@ -67,7 +67,7 @@ public class NpsProcess {
         while (true) {
             if (!process.isAlive()) {
                 if (stop()) {
-                    ClientMain.getLogHandler().accept(LocaleMessage.message("check_disconnect_reconnect"));
+                    ClientMain.getNpsLogger().logInfo(LocaleMessage.message("check_disconnect_reconnect"));
                     ClientMain.start(ClientMain.DATA_PATH);
                     return;
                 }
@@ -77,17 +77,17 @@ public class NpsProcess {
                 if (info == null) {
                     continue;
                 }
-                if (ClientMain.getOutHandler() != null) {
-                    ClientMain.getOutHandler().accept(info);
-                }
+                
+                ClientMain.getNpsLogger().logNpsProcess(info);
+                
                 if (info.contains(ErrorInfo.CLIENT_CLOSE) || info.contains(ErrorInfo.CONNECT_FAILED)) {
                     if (stop()) {
-                        ClientMain.getLogHandler().accept(LocaleMessage.message("check_disconnect_reconnect"));
+                        ClientMain.getNpsLogger().logInfo(LocaleMessage.message("check_disconnect_reconnect"));
                         ClientMain.start(ClientMain.DATA_PATH);
                     }
                 }
             } catch (Exception e) {
-                ClientMain.getLogHandler().accept(e.getMessage());
+                ClientMain.getNpsLogger().logInfo(e.getMessage());
             }
         }
     }

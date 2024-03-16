@@ -24,7 +24,7 @@ public class UpdateChecker {
         } else {
             IMCNpsVersionInfoDTO data = resultDTO.getData();
             if (data.getVersion() > Info.BUILD_VERSION) {
-                ClientMain.getLogHandler().accept(LocaleMessage.message("update_check_need_update").replace("%url%", data.getUpdateUrl()));
+                ClientMain.getNpsLogger().logInfo(LocaleMessage.message("update_check_need_update" , s-> s.replace("%url%", data.getUpdateUrl())));
             } else {
 
             }

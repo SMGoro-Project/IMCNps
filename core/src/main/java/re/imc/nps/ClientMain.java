@@ -2,6 +2,9 @@ package re.imc.nps;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.tomlj.Toml;
+import org.tomlj.TomlParseResult;
+import re.imc.nps.api.NpsLogger;
 import re.imc.nps.config.NpsConfig;
 import re.imc.nps.i18n.LocaleMessage;
 import re.imc.nps.process.NpsProcess;
@@ -29,23 +32,26 @@ public class ClientMain {
     @Getter
     private static NpsConfig config;
     @Getter
-    private static Properties properties;
+    private static TomlParseResult langToml;
     @Setter
     private static Consumer<NpsProcess> startHandler;
     @Setter
     @Getter
-    private static Consumer<String> outHandler;
-    @Setter
-    @Getter
-    private static Consumer<String> logHandler;
+    private static NpsLogger npsLogger;
     @Setter
     @Getter
     private static Info.Platform platform;
     private static int port;
 
-    public static void setup(Path path, Info.Platform platform) {
+    public static void setup(Path path, Info.Platform platform, NpsLogger logger) {
+        ClientMain.npsLogger = logger;
         loadVersion();
         loadLang();
+        if (platform == Info.Platform.FABRIC) {
+            logger.logInfo(LocaleMessage.message("fabric_before_start"));
+        } else {
+            logger.logInfo(LocaleMessage.message("before_start"));
+        }
     }
     public static void start(Path path, Info.Platform platform, int port) {
         ClientMain.platform = platform;
@@ -119,7 +125,7 @@ public class ClientMain {
         npsFile.setWritable(true);
         NpsConfig config = NpsConfig.generateConfig(TOKEN, port);
         if (config == null) {
-            getLogHandler().accept(LocaleMessage.message("not_load_npc_config"));
+            npsLogger.logInfo(LocaleMessage.message("not_load_npc_config"));
             Executors.newSingleThreadScheduledExecutor()
                     .schedule(() -> ClientMain.start(ClientMain.DATA_PATH), 3, TimeUnit.SECONDS);
             ;
@@ -138,6 +144,7 @@ public class ClientMain {
             return;
         }
 
+
         try {
             versionProperties.load(new InputStreamReader(input, StandardCharsets.UTF_8));
         } catch (IOException e) {
@@ -150,19 +157,19 @@ public class ClientMain {
         Locale locale = Locale.getDefault();
         String lang = locale.getLanguage() + "_" + locale.getCountry();
 
-        properties = new Properties();
         InputStream langInput = ClientMain.class.getClassLoader()
-                .getResourceAsStream("lang_" + lang + ".properties");
+                .getResourceAsStream("lang_" + lang + ".toml");
         if (langInput == null) {
             langInput = ClientMain.class.getClassLoader()
-                    .getResourceAsStream("lang_en_US.properties");
+                    .getResourceAsStream("lang_en_US.toml");
         }
 
         try {
-            properties.load(new InputStreamReader(langInput, StandardCharsets.UTF_8));
+            ClientMain.langToml = Toml.parse(langInput);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 
