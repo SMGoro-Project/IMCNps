@@ -18,7 +18,7 @@ before_start="""
 §f        1. Be sure to fill in §eToken§f on §eStartupParameters§f or §enpc\\token.txt§f
 §f        2. Please follow §eTutorial§f at CymoLink Lobby to configure IMCNps.
 §f        3. IMCNps is §cnot compatible with§f server panel environment.
-§f        4. Please whitelist §eIMCNps§f and §enpc\\\npc.exe§f in your antivirus software or you can't connect properly!
+§f        4. Please whitelist §eIMCNps§f and §enpc\\npc.exe§f in your antivirus software or you can't connect properly!
 §f
 """
 not_load_npc_config="§e> §cFailed to get npc config, reconnecting..."
@@ -36,9 +36,16 @@ room_id_tip="""
 """
 not_found_token="§e> §cToken Not Found! Use §b/nps <Token>§c to set your token first!"
 update_check_need_update="""
-§e> §aA new version of IMCNps is Available!
-§e> §fDownload it at §b§n%url%§r"""
 
+<yellow>○</yellow><green>-==========[</green><yellow> UPDATE </yellow><green>]==========-</green><yellow>○</yellow>
+
+<yellow>> </yellow><green>A new version of IMCNps is available!</green>
+<yellow>> </yellow><white>Download it at: </white><aqua><underlined><click:open_url:%url%>%url%</click></underlined></aqua>
+<yellow>> </yellow><white>Please keep your IMCNps up to date to ensure proper working!</white>
+
+<yellow>○</yellow><green>-==========[</green><yellow> UPDATE </yellow><green>]==========-</green><yellow>○</yellow>
+
+"""
 fabric_room_id_tip="""
 
 §e○§c-==========[§f Room Created §c]==========-§e○

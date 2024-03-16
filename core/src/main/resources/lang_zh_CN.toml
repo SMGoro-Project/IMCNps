@@ -37,10 +37,17 @@ room_id_tip="""
 not_found_token="§e> §cToken未找到！输入 §b/nps <Token>§c 设置你的Token!"
 update_check_need_update="""
 
-§e> §aIMCNps 有新版本了!
-§e> §f下载链接: §b§n%url%§r
-§e请及时更新你的IMCNps，以防无法联机！"""
+<yellow>○</yellow><green>-==========[</green><yellow> 版本更新 </yellow><green>]==========-</green><yellow>○</yellow>
 
+<yellow>> </yellow><green>IMCNps 有新版本了!</green>
+<yellow>> </yellow><white>下载链接: </white><aqua><underlined><click:open_url:%url%>%url%</click></underlined></aqua>
+<yellow>> </yellow><white>请及时更新你的IMCNps，以防无法联机！</white>
+
+<yellow>○</yellow><green>-==========[</green><yellow> 版本更新 </yellow><green>]==========-</green><yellow>○</yellow>
+
+"""
+fabric_before_start="""
+"""
 fabric_room_id_tip="""
 
 §e○§c-==========[§f 房间已创建 §c]==========-§e○

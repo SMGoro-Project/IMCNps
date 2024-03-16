@@ -126,7 +126,6 @@ public class ClientMain {
             npsLogger.logInfo(LocaleMessage.message("not_load_npc_config"));
             Executors.newSingleThreadScheduledExecutor()
                     .schedule(() -> ClientMain.start(ClientMain.DATA_PATH), 3, TimeUnit.SECONDS);
-            ;
             return null;
         }
         process = new NpsProcess(DATA_PATH + "/" + Info.NPS_PATH, type, config);

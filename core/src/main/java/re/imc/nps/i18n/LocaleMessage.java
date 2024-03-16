@@ -6,7 +6,6 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import re.imc.nps.ClientMain;
 import re.imc.nps.Info;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class LocaleMessage {
@@ -19,7 +18,7 @@ public class LocaleMessage {
         Component component;
         try {
             component = MiniMessage.miniMessage().deserialize(result);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             component = LegacyComponentSerializer.legacySection().deserialize(result);
         }
         return component;
