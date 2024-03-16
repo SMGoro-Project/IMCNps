@@ -47,9 +47,7 @@ public class ClientMain {
         ClientMain.npsLogger = logger;
         loadVersion();
         loadLang();
-        if (platform == Info.Platform.FABRIC) {
-            logger.logInfo(LocaleMessage.message("fabric_before_start"));
-        } else {
+        if (platform != Info.Platform.FABRIC) {
             logger.logInfo(LocaleMessage.message("before_start"));
         }
     }

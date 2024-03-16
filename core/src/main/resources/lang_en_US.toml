@@ -1,13 +1,39 @@
 before_start="""
-"""
 
+§6      ___________   ____   ______   __________   §c____     __   ___________   ___________
+§6     /____  ____/| / _  | / __  /| /  _______/| §c/ _  |   / /| / _______  /| / _________/|
+§6     |___/ /____|// / | |//| / / // /|_______|/§c/ / | |  / / // /|_____/ / // /_________|/
+§6        / //     / / /|_ // / / // //         §c/ / /| | / / // //_____/ / /\\_________ \\ \\
+§6       / //     / / / |_|/ / / // //         §c/ / / | |/ / // _________/ / \\________/ / /
+§6  ____/ //___  / / /      / / // //_______  §c/ / /  | | / // /|________|/ _________/ / /
+§6 /__________/|/_/ /      /_/ //__________/|§c/_/ /   |_ / //_/ /          /__________/ /
+§6 |__________|/|_|/       |_|/ |__________|/§c|_|/    |__|/ |_|/           |__________|/
+§f
+§e      >>>§a   Copyright © IMC.RE 2024
+§e      >>>§a   IMCNPS by CymoLink Dev Team
+§e      >>>§a   Version: §e%version% §7| §aBuild §e%build_version%
+§f
+§f           §e○§c-=============[ §fCaution before use§c ]=============-§e○
+§f
+§f        1. Be sure to fill in §eToken§f on §eStartupParameters§f or §enpc\\token.txt§f
+§f        2. Please follow §eTutorial§f at CymoLink Lobby to configure IMCNps.
+§f        3. IMCNps is §cnot compatible with§f server panel environment.
+§f        4. Please whitelist §eIMCNps§f and §enpc\\\npc.exe§f in your antivirus software or you can't connect properly!
+§f
+"""
 not_load_npc_config="§e> §cFailed to get npc config, reconnecting..."
 check_disconnect_reconnect="§e> §cConnection ERROR. Reconnecting..."
 room_id_tip="""
+
+
 §e○§c-==========[§f Room Created §c]==========-§e○
+
 §e> §fRoom ID:§b %room_id%
 §e> §fTo join your room, use§b /jr %room_id% §fat CymoLink Lobby.
-§e○§c-==========[§f Room Created §c]==========-§e○"""
+
+§e○§c-==========[§f Room Created §c]==========-§e○
+
+"""
 not_found_token="§e> §cToken Not Found! Use §b/nps <Token>§c to set your token first!"
 update_check_need_update="""
 §e> §aA new version of IMCNps is Available!
@@ -16,10 +42,15 @@ update_check_need_update="""
 fabric_before_start="""
 """
 fabric_room_id_tip="""
+
 §e○§c-==========[§f Room Created §c]==========-§e○
+
 §e> §fRoom ID:§b %room_id%
 §e> §fTo join your room, use§b /jr %room_id% §fat CymoLink Lobby.
-§e○§c-==========[§f Room Created §c]==========-§e○"""
+
+§e○§c-==========[§f Room Created §c]==========-§e○
+
+"""
 fabric_no_token_tip="""
 §e> §fJoin Cymolink Lobby to get your token
 §e> §aMultiplayer §f→§a Add Server §f→§a Server Address: §eus.cymolink.com
