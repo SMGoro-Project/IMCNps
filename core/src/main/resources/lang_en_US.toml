@@ -63,3 +63,13 @@ fabric_no_token_tip="""
 fabric_get_token="""
 §e> §aSuccessfully get Token from Cymolink automatically. You can go to Singleplayer and §eopen to LAN§a now!"""
 fabric_already_start="§e> §cIMCNps is already running! If you want to change your token, go to CymoLink Lobby to refresh your token, and restart Minecraft."
+
+
+screen_title="My Room"
+screen_room_name="Room Name"
+screen_room_description="Room Description"
+screen_room_node="Node"
+
+screen_no_token="You don't have Token!"
+screen_join_lobby="Join CymoLink Lobby to get Token"
+

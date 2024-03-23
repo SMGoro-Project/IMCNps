@@ -68,6 +68,11 @@ public class NpsProcess {
             if (!process.isAlive()) {
                 if (stop()) {
                     ClientMain.getNpsLogger().logInfo(LocaleMessage.message("check_disconnect_reconnect"));
+                    try {
+                        Thread.sleep(3500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     ClientMain.start(ClientMain.DATA_PATH);
                     return;
                 }
@@ -83,6 +88,7 @@ public class NpsProcess {
                 if (info.contains(ErrorInfo.CLIENT_CLOSE) || info.contains(ErrorInfo.CONNECT_FAILED)) {
                     if (stop()) {
                         ClientMain.getNpsLogger().logInfo(LocaleMessage.message("check_disconnect_reconnect"));
+                        Thread.sleep(3500);
                         ClientMain.start(ClientMain.DATA_PATH);
                     }
                 }

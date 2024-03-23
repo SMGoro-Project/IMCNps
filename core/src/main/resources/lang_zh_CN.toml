@@ -68,3 +68,13 @@ fabric_no_token_tip="""
 fabric_get_token="""
 §e> §a已自动获取Token. 你现在可以去单人游戏开启§e对局域网开放§a了！"""
 fabric_already_start="§e> §cIMCNps正在运行！如果你要修改Token，请登入联机大厅获取Token，并重启你的Minecraft客户端。"
+
+
+screen_title="我的房间"
+screen_room_name="房间名称"
+screen_room_description="房间描述"
+screen_room_node="节点"
+
+screen_no_token="你没有Token！"
+screen_join_lobby="加入Cymolink 大厅获取Token"
+
