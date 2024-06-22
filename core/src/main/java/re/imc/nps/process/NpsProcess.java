@@ -50,13 +50,13 @@ public class NpsProcess {
                 e.printStackTrace();
             }
         });
-        Executors.newSingleThreadScheduledExecutor().execute(executeThread::start);
+        executeThread.start();
 
     }
 
     public void startRead() {
         readThread = new Thread(this::readNps);
-        Executors.newSingleThreadScheduledExecutor().execute(readThread::start);
+        readThread.start();
     }
 
     public void readNps() {
@@ -64,7 +64,7 @@ public class NpsProcess {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader out = new BufferedReader(inputStreamReader);
         String info;
-        while (true) {
+        while (!Thread.interrupted() && !stop) {
             if (!process.isAlive()) {
                 if (stop()) {
                     ClientMain.getNpsLogger().logInfo(LocaleMessage.message("check_disconnect_reconnect"));
@@ -90,6 +90,7 @@ public class NpsProcess {
                         ClientMain.getNpsLogger().logInfo(LocaleMessage.message("check_disconnect_reconnect"));
                         Thread.sleep(3500);
                         ClientMain.start(ClientMain.DATA_PATH);
+                        return;
                     }
                 }
             } catch (Exception e) {
@@ -104,6 +105,7 @@ public class NpsProcess {
         }
         stop = true;
         executeThread.interrupt();
+        readThread.interrupt();
         process.destroy();
         return true;
     }

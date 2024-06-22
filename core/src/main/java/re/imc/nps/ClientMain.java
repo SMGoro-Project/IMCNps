@@ -127,6 +127,9 @@ public class ClientMain {
         if (config == null) {
             npsLogger.logInfo(LocaleMessage.message("not_load_npc_config"));
             SCHEDULED_EXECUTOR.schedule(() -> ClientMain.start(ClientMain.DATA_PATH), 3, TimeUnit.SECONDS);
+            if (process != null) {
+                process.stop();
+            }
             return null;
         }
         process = new NpsProcess(DATA_PATH + "/" + Info.NPS_PATH, type, config);
