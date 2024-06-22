@@ -20,12 +20,15 @@ import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class ClientMain {
 
     public static String TOKEN;
+    private static ScheduledExecutorService SCHEDULED_EXECUTOR = Executors.newSingleThreadScheduledExecutor();
+
     public static Path DATA_PATH;
     @Getter
     private static NpsProcess process;
@@ -82,7 +85,6 @@ public class ClientMain {
 
             try {
                 InputStream in = ClientMain.class.getClassLoader().getResourceAsStream("token.txt");
-
                 Files.copy(in, file);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -124,8 +126,7 @@ public class ClientMain {
         NpsConfig config = NpsConfig.generateConfig(TOKEN, port);
         if (config == null) {
             npsLogger.logInfo(LocaleMessage.message("not_load_npc_config"));
-            Executors.newSingleThreadScheduledExecutor()
-                    .schedule(() -> ClientMain.start(ClientMain.DATA_PATH), 3, TimeUnit.SECONDS);
+            SCHEDULED_EXECUTOR.schedule(() -> ClientMain.start(ClientMain.DATA_PATH), 3, TimeUnit.SECONDS);
             return null;
         }
         process = new NpsProcess(DATA_PATH + "/" + Info.NPS_PATH, type, config);

@@ -25,7 +25,7 @@ public final class SpigotMain extends JavaPlugin {
             public void logInfo(Component component) {
                 try {
                     Bukkit.getConsoleSender().sendMessage(component);
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     Bukkit.getConsoleSender().sendMessage(LegacyComponentSerializer.legacySection().serialize(component));
                 }
             }
